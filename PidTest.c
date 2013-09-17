@@ -39,15 +39,13 @@ Sensor Port 4               sonar                           Sonar Sensor        
 
 ----------------------------------------------------------------------------------------------------*/
 
-#define THRESHOLD 45
 #define KP        0.1
-#define BASESPEED 50
 
+// Actually P drive
 void pidDrive(const int speed, const int timeMillis);
 
 int speed = 50;
 int leftSpeed = 10;
-
 
 task main()
 {
@@ -55,44 +53,44 @@ task main()
     //Clear the encoders
     nMotorEncoder(rightMotor) = 0;
     nMotorEncoder(leftMotor)  = 0;
-    
+
     motor[rightMotor] = speed;
     motor[leftMotor] = leftSpeed;
-    
-    //wait1Msec(1000);
-    
+
+    //wait1Msec(5000);
+
     pidDrive(speed, 1000);
-    
+
     motor[leftMotor] = 0;
     motor[rightMotor] = 0;
 }
 
 void pidDrive(const int speed, const int timeMillis)
 {
-    int left, right = 0;
-    while(true)
-    {
-      int error = abs(nMotorEncoder(leftMotor)) - abs(nMotorEncoder(rightMotor));
-    error = abs(error);
-    int powerDiff = error*KP;
-    if(abs(nMotorEncoder(leftMotor)) < abs(nMotorEncoder(rightMotor)))
-    {
-      motor[leftMotor] = leftSpeed + powerDiff;
-      motor[rightMotor] = speed - powerDiff;
-    }
-    else
-    {
-        motor[leftMotor] = leftSpeed - powerDiff;
-        motor[rightMotor] = speed + powerDiff;
-    }
-    left = motor[leftMotor];
-    right = motor[rightMotor];
-    nxtDisplayString(1, "leftE = %d", nMotorEncoder(leftMotor));
-    nxtDisplayString(2, "rightE = %d", nMotorEncoder(rightMotor));
-    nxtDisplayString(3, "error = %d", error);
-    nxtDisplayString(4, "powerDiff = %d", powerDiff);
-    nxtDisplayString(5, "left = %d", left);
-    nxtDisplayString(6, "right = %d", right);
-    wait1Msec(100);
-  }
+  int left, right = 0;
+  while(true)
+  {
+    int error = abs(nMotorEncoder(leftMotor)) - abs(nMotorEncoder(rightMotor));
+  	error = abs(error);
+  	int powerDiff = error*KP;
+  	if(abs(nMotorEncoder(leftMotor)) < abs(nMotorEncoder(rightMotor)))
+  	{
+    	motor[leftMotor] = leftSpeed + powerDiff;
+    	motor[rightMotor] = speed - powerDiff;
+  	}
+  	else
+  	{
+    	motor[leftMotor] = leftSpeed - powerDiff;
+    	motor[rightMotor] = speed + powerDiff;
+  	}
+  	left = motor[leftMotor];
+  	right = motor[rightMotor];
+  	nxtDisplayString(1, "leftE = %d", nMotorEncoder(leftMotor));
+  	nxtDisplayString(2, "rightE = %d", nMotorEncoder(rightMotor));
+  	nxtDisplayString(3, "error = %d", error);
+  	nxtDisplayString(4, "powerDiff = %d", powerDiff);
+  	nxtDisplayString(5, "left = %d", left);
+  	nxtDisplayString(6, "right = %d", right);
+  	wait1Msec(100);
+	}
 }
