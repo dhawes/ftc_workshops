@@ -70,6 +70,7 @@ void pidDrive(const int speed, const int timeMillis)
   int left, right = 0;
   while(true)
   {
+  	// find the difference between encoders
     int error = abs(nMotorEncoder(leftMotor)) - abs(nMotorEncoder(rightMotor));
   	error = abs(error);
   	int powerDiff = error*KP;
